@@ -4,10 +4,10 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapStaffObjectHandlerSax extends DefaultHandler {
+public class CurrencyHandler extends DefaultHandler {
     private final StringBuilder currentValue = new StringBuilder();
     List<Currency> result;
-    Currency currentStaff;
+    Currency current;
 
     public List<Currency> getResult() {
         return result;
@@ -24,21 +24,12 @@ public class MapStaffObjectHandlerSax extends DefaultHandler {
             String localName,
             String qName,
             Attributes attributes) {
-
         currentValue.setLength(0);
-
-
         if (qName.equalsIgnoreCase("Valute")) {
-
-
-            currentStaff = new Currency();
-
-
+            current = new Currency();
             String id = attributes.getValue("ID");
-            currentStaff.setId(id);
+            current.setId(id);
         }
-
-
     }
 
     public void endElement(String uri,
@@ -46,30 +37,25 @@ public class MapStaffObjectHandlerSax extends DefaultHandler {
                            String qName) {
 
         if (qName.equalsIgnoreCase("numCode")) {
-            currentStaff.setNumCode(currentValue.toString());
+            current.setNumCode(currentValue.toString());
         }
-
         if (qName.equalsIgnoreCase("charCode")) {
-            currentStaff.setCharCode(currentValue.toString());
+            current.setCharCode(currentValue.toString());
         }
-
         if (qName.equalsIgnoreCase("Nominal")) {
-            currentStaff.setNominal(Float.parseFloat(currentValue.toString()));
+            current.setNominal(Float.parseFloat(currentValue.toString()));
         }
-
         if (qName.equalsIgnoreCase("Name")) {
-            currentStaff.setName(currentValue.toString());
+            current.setName(currentValue.toString());
         }
         if (qName.equalsIgnoreCase("Value")) {
             String s = currentValue.toString();
             s = s.replace(",", ".");
-            currentStaff.setValue(Float.parseFloat(s));
+            current.setValue(Float.parseFloat(s));
         }
-
         if (qName.equalsIgnoreCase("Valute")) {
-            result.add(currentStaff);
+            result.add(current);
         }
-
     }
 
     public void characters(char[] ch, int start, int length) {
